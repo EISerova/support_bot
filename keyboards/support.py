@@ -4,7 +4,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.callback_data import CallbackData
 
 from loader import dp
-from settings.config import operator_ids
+from settings.config import OPERATOR_IDS
 from settings.constants import END_BUTTON, SUPPORT_ANSWER_BUTTON, USER_QUESTION_BUTTON
 
 support_callback = CallbackData("ask_support", "messages", "operator_id", "is_user")
@@ -25,7 +25,7 @@ async def check_operator_status(operator_id):
 
 async def get_operator():
     # random.shuffle(support_ids)
-    for operator_id in operator_ids:
+    for operator_id in OPERATOR_IDS:
         # Проверим если оператор в данное время не занят
         operator_id = await check_operator_status(operator_id)
         return operator_id
@@ -52,7 +52,7 @@ async def support_keyboard(messages, user_id=None):
             # Если не нашли свободного оператора - выходим и говорим, что его нет
             return False
         elif messages == "one" and contact_id is None:
-            contact_id = random.choice(operator_ids)
+            contact_id = random.choice(OPERATOR_IDS)
 
     keyboard = InlineKeyboardMarkup()
 

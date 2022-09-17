@@ -1,16 +1,19 @@
-from aiogram import executor
-
 from loader import dp
-import middlewares, handlers
+import handlers
 from settings.commands import set_commands
 from utils.notify_admins import on_startup_notify
 
+async def on_startup(dp):
+    import middlewares
+    
+    middlewares.setup(dp)
+    await set_commands(dp)
+    await on_startup_notify(dp)
 
-async def on_startup(dispatcher):
-    # Уведомляет про запуск
-    await set_commands(dispatcher)
-    await on_startup_notify(dispatcher)
+
 
 
 if __name__ == '__main__':
+    from aiogram import executor
+    
     executor.start_polling(dp, on_startup=on_startup)
