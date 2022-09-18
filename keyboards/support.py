@@ -3,35 +3,15 @@ import random
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.callback_data import CallbackData
 
-from loader import dp
 from settings.config import OPERATOR_IDS
 from settings.constants import END_BUTTON, SUPPORT_ANSWER_BUTTON, USER_QUESTION_BUTTON
+from utils.get_operators import get_operator
 
-support_callback = CallbackData("ask_support", "messages", "operator_id", "is_user")
+support_callback = CallbackData("ask_support", "user_id", "is_user")
 cancel_support_callback = CallbackData("cancel_support", "user_id")
 
 
-async def check_operator_status(operator_id):
-    """
-    Проверяет статус оператора,
-    если in_support - оператор занят.
-    """
-    state = dp.current_state(chat=operator_id, user=operator_id)
-    state_str = str(await state.get_state())
-    if state_str == "in_support":
-        return
-    return operator_id
-
-
-async def get_operator():
-    # random.shuffle(support_ids)
-    for operator_id in OPERATOR_IDS:
-        # Проверим если оператор в данное время не занят
-        operator_id = await check_operator_status(operator_id)
-        return operator_id
-
-
-async def support_keyboard(messages, user_id=None):
+async def support_keyboard(user_id=None):
     """
     Клавиатура запроса в тех.поддержку.
     Если user_id указан - меню для оператора,
@@ -44,39 +24,29 @@ async def support_keyboard(messages, user_id=None):
         text = SUPPORT_ANSWER_BUTTON
 
     else:
-
         contact_id = await get_operator()
         is_user = "yes"
         text = USER_QUESTION_BUTTON
-        if messages == "many" and contact_id is None:
-            # Если не нашли свободного оператора - выходим и говорим, что его нет
-            return False
-        elif messages == "one" and contact_id is None:
+        if contact_id is None:
             contact_id = random.choice(OPERATOR_IDS)
 
     keyboard = InlineKeyboardMarkup()
 
     ask_button = InlineKeyboardButton(
         text=text,
-        callback_data=support_callback.new(
-            messages=messages, operator_id=contact_id, is_user=is_user
-        ),
+        callback_data=support_callback.new(user_id=contact_id, is_user=is_user),
     )
 
     end_button = InlineKeyboardButton(
         text=END_BUTTON, callback_data=cancel_support_callback.new(user_id=contact_id)
     )
 
-    if messages == "many":
-        buttons = [ask_button, end_button]
-    else:
-        buttons = [ask_button]
-
-    keyboard.add(*buttons)
+    keyboard.add(ask_button, end_button)
     return keyboard
 
 
 def cancel_support(user_id):
+    """Клавиатура завершения чата."""
     return InlineKeyboardMarkup(
         inline_keyboard=[
             [

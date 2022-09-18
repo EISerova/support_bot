@@ -23,8 +23,8 @@ class SupportMiddleware(BaseMiddleware):
 
             # Заберем айди второго пользователя и отправим ему сообщение
             data = await state.get_data()
-            second_id = data.get("second_id")
-            await message.copy_to(second_id)
+            operator_id = data.get("user_id")
+            await message.copy_to(operator_id)
 
             # Не пропустим дальше обработку в хендлеры
             raise CancelHandler()
