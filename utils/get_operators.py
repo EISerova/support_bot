@@ -1,4 +1,3 @@
-
 import random
 from loader import dp
 from settings.config import OPERATOR_IDS
@@ -20,13 +19,11 @@ async def get_operator():
     """
     Рандомный выбор оператора из списка OPERATOR_IDS.
     Дополнительная проверка check_operator_status, что оператор не занят.
-    """    
+    """
     random.shuffle(OPERATOR_IDS)
     for operator_id in OPERATOR_IDS:
         operator_id = await check_operator_status(operator_id)
         if operator_id:
             return operator_id
     else:
-        return 
-
-
+        return

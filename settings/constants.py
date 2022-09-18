@@ -25,7 +25,9 @@ USER_REFUSE_MESSAGE = "К сожалению, пользователь уже п
 START_DIALOG_WITH_USER_MESSAGE = "Начало диалога."
 START_DIALOG_WITH_OPERATOR_MESSAGE = "Здравствуйте, техподдержка на связи! Задавайте свой вопрос. Чтобы завершить общение нажмите на кнопку."
 WAIT_FOR_OPERATOR_MESSAGE = "Дождитесь ответа оператора или отмените сеанс."
-USER_END_DIALOG_MESSAGE = "Сеанс тех.поддержки завершен."
 END_DIALOG_FOR_USER_MESSAGE = "Сеанс тех.поддержки завершен."
-OPERATOR_END_DIALOG_MESSAGE = "Сеанс с завершен. "
+OPERATOR_END_DIALOG_MESSAGE = "Сеанс завершен. "
 
+
+# Ответ юзеру без состояния
+ECHO_ANSWER = "Ваше сообщение отправлено вне чата. Нажмите /start и ждите ответа оператора."
