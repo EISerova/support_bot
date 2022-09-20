@@ -1,0 +1,17 @@
+import pytest
+import os
+
+class TestEnv:
+
+    ENV_VARS = ['ADMINS', 'BOT_TOKEN', 'OPERATOR_IDS']
+    
+    for v in ENV_VARS:
+        try:
+            os.environ.pop(v)
+        except KeyError as e:
+            for arg in e.args:
+                if arg in ENV_VARS:
+                    assert False, (
+                        'Проверьте, наличие необходимых переменных окружения'
+                        f' {repr(e)}'
+                    )

@@ -4,7 +4,6 @@ from handlers.echo import bot_echo
 from settings.constants import ECHO_ANSWER
 
 
-
 @pytest.mark.asyncio
 async def test_echo_handler():
     text_mock = ECHO_ANSWER
