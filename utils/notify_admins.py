@@ -11,5 +11,5 @@ async def on_startup_notify(dp: Dispatcher):
         try:
             await dp.bot.send_message(admin, RUN_BOT_MESSAGE)
 
-        except Exception as err:
-            logging.exception(err)
+        except Exception as error:
+            logging.exception(error)

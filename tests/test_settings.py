@@ -1,17 +1,16 @@
 import pytest
 import os
 
-class TestEnv:
-
+def test_env():
     ENV_VARS = ['ADMINS', 'BOT_TOKEN', 'OPERATOR_IDS']
     
-    for v in ENV_VARS:
+    for var in ENV_VARS:
         try:
-            os.environ.pop(v)
-        except KeyError as e:
-            for arg in e.args:
+            os.environ.pop(var)
+        except KeyError as error:
+            for arg in error.args:
                 if arg in ENV_VARS:
                     assert False, (
                         'Проверьте, наличие необходимых переменных окружения'
-                        f' {repr(e)}'
+                        f' {repr(error)}'
                     )
