@@ -1,8 +1,11 @@
+import logging
+
 from aiogram import types
 from aiogram.dispatcher.handler import CancelHandler
 from aiogram.dispatcher.middlewares import BaseMiddleware
 
 from loader import dp
+
 
 class SupportMiddleware(BaseMiddleware):
     async def on_pre_process_message(self, message: types.Message, data: dict):
@@ -11,6 +14,10 @@ class SupportMiddleware(BaseMiddleware):
         if state_str == "in_support":
             data = await state.get_data()
             operator_id = data.get("user_id")
-            await message.copy_to(operator_id)
+            
+            try:
+                await message.copy_to(operator_id)
+            except Exception as error:
+                logging.exception(error)             
 
             raise CancelHandler()

@@ -1,11 +1,14 @@
 import random
-from loader import dp
-from settings.config import OPERATOR_IDS, OPERATOR_LOGINS
-
+import typing
 import logging
 
+from loader import dp
+from settings.config import OPERATOR_IDS, OPERATOR_LOGINS
+from settings.constants import GET_OPERATOR, NO_FREE_OPERATORS
 
-async def check_operator_status(operator_id):
+
+
+async def check_operator_status(operator_id) -> typing.Union[int, None]:
     """
     Проверяет статус оператора,
     если in_support - оператор занят.
@@ -17,17 +20,20 @@ async def check_operator_status(operator_id):
     return operator_id
 
 
-async def get_operator():
+async def get_operator() -> typing.Union[int, None]:
     """
     Рандомный выбор оператора из списка OPERATOR_IDS.
     Дополнительная проверка check_operator_status, что оператор не занят.
     """
+    checked_operators = {}
     random.shuffle(OPERATOR_IDS)
     for operator_id in OPERATOR_IDS:
-        operator_id = await check_operator_status(operator_id)
-        if operator_id:
-            operator_name = OPERATOR_LOGINS.get(operator_id)
-            logging.info(f'Выбран оператор - {operator_name}')
+        checked_id = await check_operator_status(operator_id)
+        checked_operators[operator_id] = checked_id
+        if checked_id:
+            operator_name = OPERATOR_LOGINS.get(checked_id)
+            logging.info(GET_OPERATOR.format(operator_name=operator_name))
             return operator_id
     else:
+        logging.info(NO_FREE_OPERATORS.format(checked_operators=checked_operators))
         return

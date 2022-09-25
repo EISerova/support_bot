@@ -16,6 +16,7 @@ SUPPORT_ANSWER_BUTTON = "Ответить пользователю"
 USER_QUESTION_BUTTON = "Задать вопрос оператору"
 END_BUTTON = "Завершить сеанс"
 
+# Автоматические сообщения в чат
 NO_FREE_OPERATORS_MESSAGE = (
     "К сожалению, сейчас нет свободных операторов. Попробуйте позже."
 )
@@ -28,10 +29,21 @@ WAIT_FOR_OPERATOR_MESSAGE = "Дождитесь ответа оператора 
 END_DIALOG_FOR_USER_MESSAGE = "Сеанс тех.поддержки завершен."
 OPERATOR_END_DIALOG_MESSAGE = "Сеанс завершен. "
 
-
 # Ответ юзеру без состояния
-ECHO_ANSWER = "Ваше сообщение отправлено вне чата. Нажмите /start и ждите ответа оператора."
+ECHO_ANSWER = (
+    "Ваше сообщение отправлено вне чата. Нажмите /start и ждите ответа оператора."
+)
 
-# Ошибка - нет переменной окружения
+# Сообщения для логгирования
+GET_OPERATOR = "Выбран оператор - {operator_name}"
+NO_FREE_OPERATORS = (
+    "Свободный оператор не найден, статусы операторов: {checked_operators}"
+)
+USER_GET_START = 'Юзер {user} нажал /start'
+END_DIALOG = 'Сеанс тех.поддержки завершен. Юзер - {user}, chat_instance - {chat_instance}.'
+START_DIALOG_USER = 'Юзер нажал "задать вопрос", chat_instance - {chat_instance}.'
+START_DIALOG_OPERATOR = 'Оператор {chat_instance} нажал "ответить пользователю".'
+
+# Сообщения об ошибках
 ERROR_TOKEN = "Отсутствует обязательный токен: {error}"
-
+ERROR_EDIT_MESSAGE = 'Неудалось отредактировать сообщение, ошибка: {error}'
