@@ -39,11 +39,13 @@ GET_OPERATOR = "Выбран оператор - {operator_name}"
 NO_FREE_OPERATORS = (
     "Свободный оператор не найден, статусы операторов: {checked_operators}"
 )
-USER_GET_START = 'Юзер {user} нажал /start'
-END_DIALOG = 'Сеанс тех.поддержки завершен. Юзер - {user}, chat_instance - {chat_instance}.'
+USER_GET_START = "Юзер {user} нажал /start"
+END_DIALOG = (
+    "Сеанс тех.поддержки завершен. Юзер - {user}, chat_instance - {chat_instance}."
+)
 START_DIALOG_USER = 'Юзер нажал "задать вопрос", chat_instance - {chat_instance}.'
 START_DIALOG_OPERATOR = 'Оператор {chat_instance} нажал "ответить пользователю".'
 
 # Сообщения об ошибках
 ERROR_TOKEN = "Отсутствует обязательный токен: {error}"
-ERROR_EDIT_MESSAGE = 'Неудалось отредактировать сообщение, ошибка: {error}'
+ERROR_EDIT_MESSAGE = "Неудалось отредактировать сообщение, ошибка: {error}"

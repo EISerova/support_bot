@@ -1,8 +1,9 @@
-from loader import dp
+import logging
+
 import handlers
+from loader import dp
 from settings.commands import set_commands
 from utils.notify_admins import on_startup_notify
-import logging
 
 
 async def on_startup(dp):

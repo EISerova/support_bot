@@ -1,8 +1,8 @@
-from environs import Env, EnvError
 import logging
 
-from settings.constants import ERROR_TOKEN
+from environs import Env, EnvError
 
+from settings.constants import ERROR_TOKEN
 
 env = Env()
 env.read_env()

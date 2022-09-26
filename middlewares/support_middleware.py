@@ -14,10 +14,10 @@ class SupportMiddleware(BaseMiddleware):
         if state_str == "in_support":
             data = await state.get_data()
             operator_id = data.get("user_id")
-            
+
             try:
                 await message.copy_to(operator_id)
             except Exception as error:
-                logging.exception(error)             
+                logging.exception(error)
 
             raise CancelHandler()

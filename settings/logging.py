@@ -1,10 +1,10 @@
 import logging
-
 from logging.handlers import RotatingFileHandler
 
 LOGGING_LEVEL = logging.INFO
 
 log = logging.getLogger()
+
 log.setLevel(LOGGING_LEVEL)
 formatter = logging.Formatter(
     "%(asctime)s - %(levelname)s - %(message)s - %(funcName)s - %(lineno)d"

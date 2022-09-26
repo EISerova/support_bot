@@ -1,5 +1,7 @@
-import pytest
 from unittest.mock import AsyncMock
+
+import pytest
+
 from handlers.echo import bot_echo
 from settings.constants import ECHO_ANSWER
 

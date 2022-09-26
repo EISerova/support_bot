@@ -1,7 +1,6 @@
-from settings import logging
-
 from aiogram import Dispatcher
 
+from settings import logging
 from settings.config import ADMINS
 from settings.constants import RUN_BOT_MESSAGE
 

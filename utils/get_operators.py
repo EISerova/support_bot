@@ -1,11 +1,10 @@
+import logging
 import random
 import typing
-import logging
 
 from loader import dp
 from settings.config import OPERATOR_IDS, OPERATOR_LOGINS
 from settings.constants import GET_OPERATOR, NO_FREE_OPERATORS
-
 
 
 async def check_operator_status(operator_id) -> typing.Union[int, None]:

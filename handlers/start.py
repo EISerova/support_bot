@@ -12,23 +12,21 @@ from keyboards.support import (
 )
 from loader import bot, dp
 from settings.constants import (
+    END_DIALOG,
+    END_DIALOG_FOR_USER_MESSAGE,
     NO_FREE_OPERATORS_MESSAGE,
     OPERATOR_END_DIALOG_MESSAGE,
+    START_DIALOG_OPERATOR,
+    START_DIALOG_USER,
     START_DIALOG_WITH_OPERATOR_MESSAGE,
     START_DIALOG_WITH_USER_MESSAGE,
     START_GREETING_MESSAGE,
+    USER_GET_START,
     USER_REFUSE_MESSAGE,
     USER_REQUEST_MESSAGE,
     WAIT_FOR_OPERATOR_MESSAGE,
     WAIT_OPERATOR_MESSAGE,
-    END_DIALOG_FOR_USER_MESSAGE,
-    USER_GET_START,
-    END_DIALOG,
-    START_DIALOG_USER,
-    START_DIALOG_OPERATOR,
 )
-
-
 from utils.get_operators import check_operator_status, get_operator
 
 
@@ -49,23 +47,26 @@ async def not_supported(message: types.Message, state: FSMContext):
     data = await state.get_data()
     user = data.get("user_id")
     try:
-        await message.answer(WAIT_FOR_OPERATOR_MESSAGE, reply_markup=cancel_support(user))
+        await message.answer(
+            WAIT_FOR_OPERATOR_MESSAGE, reply_markup=cancel_support(user)
+        )
     except Exception as error:
         logging.exception(error)
+
 
 @dp.callback_query_handler(support_callback.filter(is_user="yes"))
 async def send_to_support_call(
     call: types.CallbackQuery, state: FSMContext, callback_data: dict
 ):
     """Хэндлер для юзера."""
-    
+
     try:
         await call.message.edit_text(
             WAIT_OPERATOR_MESSAGE, reply_markup=cancel_support(call.from_user.id)
         )
     except Exception as error:
         logging.exception(error)
-    
+
     operator_id = int(callback_data.get("user_id"))
     if not await check_operator_status(operator_id):
         operator = await get_operator()
@@ -83,7 +84,7 @@ async def send_to_support_call(
     keyboard = await support_keyboard(user_id=call.from_user.id)
     await state.set_state("wait_for_support")
     await state.update_data(user_id=operator)
-    logging.info(START_DIALOG_USER.format(chat_instance=call.message['chat'])) 
+    logging.info(START_DIALOG_USER.format(chat_instance=call.message["chat"]))
     await bot.send_message(
         operator,
         USER_REQUEST_MESSAGE.format(user=call.from_user.full_name),
@@ -105,7 +106,9 @@ async def start_dialog_with_user(
         except Exception as error:
             logging.exception(error)
         return
-    logging.info(START_DIALOG_OPERATOR.format(chat_instance=call.message['chat']['username'])) 
+    logging.info(
+        START_DIALOG_OPERATOR.format(chat_instance=call.message["chat"]["username"])
+    )
     await state.set_state("in_support")
     await user_state.set_state("in_support")
     await state.update_data(user_id=user)
@@ -114,12 +117,11 @@ async def start_dialog_with_user(
             START_DIALOG_WITH_USER_MESSAGE, reply_markup=cancel_support(user)
         )
         await bot.send_message(
-        user,
-        START_DIALOG_WITH_OPERATOR_MESSAGE,
-    )
+            user,
+            START_DIALOG_WITH_OPERATOR_MESSAGE,
+        )
     except Exception as error:
-            logging.exception(error)
-
+        logging.exception(error)
 
 
 @dp.callback_query_handler(
@@ -134,12 +136,13 @@ async def exit_support(
 
     if await current_state.get_state():
         await current_state.reset_state()
-        logging.info(END_DIALOG.format(user=user_id, chat_instance=call.message['chat']))        
+        logging.info(
+            END_DIALOG.format(user=user_id, chat_instance=call.message["chat"])
+        )
         await bot.send_message(user_id, END_DIALOG_FOR_USER_MESSAGE)
-        
+
     try:
         await call.message.edit_text(OPERATOR_END_DIALOG_MESSAGE)
         await state.reset_state()
     except Exception as error:
-            logging.exception(error)
-            
+        logging.exception(error)
