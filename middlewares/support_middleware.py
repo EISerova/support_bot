@@ -36,7 +36,6 @@ from loader import dp
 # для пользователя и операторов, которые находятся на связи.
 # Отсюда сообщения в хендлеры даже направляться не будут
 class SupportMiddleware(BaseMiddleware):
-
     async def on_pre_process_message(self, message: types.Message, data: dict):
         # Для начала достанем состояние текущего пользователя,
         # так как state: FSMContext нам сюда не прилетит

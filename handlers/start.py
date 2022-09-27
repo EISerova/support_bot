@@ -45,7 +45,7 @@ async def bot_start(message: types.Message):
 async def not_supported(message: types.Message, state: FSMContext):
     """Хэндлер для юзера в состоянии wait_for_support."""
     data = await state.get_data()
-    user = data.get("user_id")
+    user = data.get("second_id")
     try:
         await message.answer(
             WAIT_FOR_OPERATOR_MESSAGE, reply_markup=cancel_support(user)
@@ -60,18 +60,20 @@ async def send_to_support_call(
 ):
     """Хэндлер для юзера."""
 
+    callback_user = int(callback_data.get("user_id"))
+
     try:
         await call.message.edit_text(
-            WAIT_OPERATOR_MESSAGE, reply_markup=cancel_support(call.from_user.id)
+            WAIT_OPERATOR_MESSAGE,
+            reply_markup=cancel_support(callback_user),
         )
     except Exception as error:
         logging.exception(error)
 
-    operator_id = int(callback_data.get("user_id"))
-    if not await check_operator_status(operator_id):
+    if not await check_operator_status(callback_user):
         operator = await get_operator()
     else:
-        operator = operator_id
+        operator = callback_user
 
     if not operator:
         try:
@@ -112,15 +114,16 @@ async def start_dialog_with_user(
     await state.set_state("in_support")
     await user_state.set_state("in_support")
     await state.update_data(second_id=second_id)
-    
-    
+
     try:
         await call.message.edit_text(
             START_DIALOG_WITH_USER_MESSAGE, reply_markup=cancel_support(second_id)
         )
         await bot.send_message(
             second_id,
-            START_DIALOG_WITH_OPERATOR_MESSAGE, reply_markup=cancel_support(call.from_user.id))
+            START_DIALOG_WITH_OPERATOR_MESSAGE,
+            reply_markup=cancel_support(call.from_user.id),
+        )
     except Exception as error:
         logging.exception(error)
 
