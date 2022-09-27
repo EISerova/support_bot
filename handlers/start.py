@@ -83,7 +83,7 @@ async def send_to_support_call(
 
     keyboard = await support_keyboard(user_id=call.from_user.id)
     await state.set_state("wait_for_support")
-    await state.update_data(user_id=operator)
+    await state.update_data(second_id=operator)
     logging.info(START_DIALOG_USER.format(chat_instance=call.message["chat"]))
     await bot.send_message(
         operator,
@@ -97,8 +97,8 @@ async def start_dialog_with_user(
     call: types.CallbackQuery, state: FSMContext, callback_data: dict
 ):
     """Хэндлер для оператора."""
-    user = int(callback_data.get("user_id"))
-    user_state = dp.current_state(user=user, chat=user)
+    second_id = int(callback_data.get("user_id"))
+    user_state = dp.current_state(user=second_id, chat=second_id)
 
     if str(await user_state.get_state()) != "wait_for_support":
         try:
@@ -111,15 +111,16 @@ async def start_dialog_with_user(
     )
     await state.set_state("in_support")
     await user_state.set_state("in_support")
-    await state.update_data(user_id=user)
+    await state.update_data(second_id=second_id)
+    
+    
     try:
         await call.message.edit_text(
-            START_DIALOG_WITH_USER_MESSAGE, reply_markup=cancel_support(user)
+            START_DIALOG_WITH_USER_MESSAGE, reply_markup=cancel_support(second_id)
         )
         await bot.send_message(
-            user,
-            START_DIALOG_WITH_OPERATOR_MESSAGE,
-        )
+            second_id,
+            START_DIALOG_WITH_OPERATOR_MESSAGE, reply_markup=cancel_support(call.from_user.id))
     except Exception as error:
         logging.exception(error)
 
@@ -143,6 +144,6 @@ async def exit_support(
 
     try:
         await call.message.edit_text(OPERATOR_END_DIALOG_MESSAGE)
-        await state.reset_state()
     except Exception as error:
         logging.exception(error)
+    await state.reset_state()

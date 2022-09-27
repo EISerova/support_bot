@@ -4,7 +4,7 @@ import pytest
 
 
 def test_env():
-    ENV_VARS = ["ADMINS", "BOT_TOKEN", "OPERATOR_IDS"]
+    ENV_VARS = ["ADMINS", "BOT_TOKEN", "FIRST_OPERATOR"]
 
     for var in ENV_VARS:
         try:
